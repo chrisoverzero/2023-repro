@@ -1,0 +1,64 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Transform: AWS::Serverless-2016-10-31
+
+Description: A test of provided.al2023.
+
+Parameters:
+  Environment:
+    Type: String
+    Description: The environment as which to run Unpoller.
+    AllowedValues:
+    - development
+    - staging
+    - production
+    ConstraintDescription: Value must be a known environment.
+  DeploymentMode:
+    Type: String
+    Description: >-
+      The mode by which the application will be deployed.
+      Developer sandboxes emulate live environments with
+      some features disabled by default.
+    AllowedValues:
+    - sandbox
+    - live
+    Default: sandbox
+    ConstraintDescription: Value must be a known deployment mode.
+
+Mappings:
+  Log:
+    development:
+      Level: Debug
+    staging:
+      Level: Debug
+    production:
+      Level: Information
+
+Globals:
+  Function:
+    Runtime: provided.al2
+    Timeout: 30
+    MemorySize: 1024
+    Tracing: Active
+    AutoPublishAlias: !Ref DeploymentMode
+    Environment:
+      Variables:
+        DOTNET_ENVIRONMENT: !Ref Environment
+        Logging__LogLevel__Default: !FindInMap [ Log, !Ref Environment, Level ]
+
+Resources:
+  Try:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/Try/
+      Handler: Try
+      Description: A test of provided.al2023
+      Policies:
+      - Version: 2012-10-17
+        Statement:
+          Action: s3:ListBucket
+          Effect: Allow
+          Resource: !Sub arn:${AWS::Partition}:s3:::fen-object-share
+    Metadata:
+      BuildMethod: dotnet7

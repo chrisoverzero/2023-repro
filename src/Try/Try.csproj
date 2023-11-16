@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisMode>all</AnalysisMode>
+    <AnalysisLevel>preview</AnalysisLevel>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <Description>See how provided.al2* interacts with AWSSDK.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(CI)' == 'true' ">
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <PublishAot>true</PublishAot>
+    <SelfContained>true</SelfContained>
+    <AssemblyName>bootstrap</AssemblyName>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <StackTraceSupport>false</StackTraceSupport>
+    <OptimizationPreference>size</OptimizationPreference>
+
+    <IlcScanReflection>true</IlcScanReflection>
+    <IlcInstructionSet>skylake</IlcInstructionSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.300.3"/>
+    <PackageReference Include="AWSSDK.StepFunctions" Version="3.7.301.1"/>
+    <PackageReference Include="System.Interactive.Async" Version="6.0.1"/>
+    <PackageReference Include="Tiger.Stripes" Version="1.0.0-rc1" />
+  </ItemGroup>
+
+</Project>
